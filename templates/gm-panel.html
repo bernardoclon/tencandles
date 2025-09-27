@@ -1,0 +1,19 @@
+<div class="gm-panel-content">
+    <div class="candle-container">
+        {{#each candles}}
+        <i class="fas fa-fire candle-icon {{#if lit}}lit{{else}}unlit{{/if}}" data-index="{{index}}" title="Candle {{add index 1}}"></i>
+        {{/each}}
+    </div>
+    <div class="panel-footer">
+        <p><strong>{{litCandles}}</strong> {{localize "TENCANDLES.GM.LitCandles"}}</p>
+        {{#if (gt dicePenalty 0)}}
+        <p class="dice-penalty">{{localize "TENCANDLES.GM.DicePenaltyDisplay"}} -{{dicePenalty}}</p>
+        {{/if}}
+        <p class="available-dice"><strong>{{availableDice}}</strong>{{localize "TENCANDLES.GM.AvailableDice"}}</p>
+        {{#if (gt litCandles 0)}}
+        <button class="extinguish-btn">{{localize "TENCANDLES.GM.ExtinguishButton"}}</button>
+        {{else}}
+        <p><strong>{{localize "TENCANDLES.GM.LightGone"}}</strong></p>
+        {{/if}}
+    </div>
+</div>

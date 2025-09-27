@@ -1,0 +1,531 @@
+/* Ten Candles System - Tema Ten Candles */
+
+/* Importación de fuentes para una sensación sombría y antigua */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Special+Elite&display=swap');
+@import url('./chat-message.css');
+
+/* --- VARIABLES DE COLOR --- */
+:root {
+  --color-darkness: #0a0a0a; /* Oscuridad profunda */
+  --color-shadow: #1c1c1c; /* Sombras sutiles */
+  --color-ember: #3d3a3a; /* Brasa apagada */
+  --color-fading-red: #8b0000; /* Rojo oscuro que se desvanece */
+  --color-dying-flame: #e76f51; /* Naranja rojizo, como una llama moribunda */
+  --color-final-glow: #ffc400; /* Resplandor final */
+  --color-text-light: #c2c2c2;
+  --color-text-muted: #666;
+  --color-border: #444;
+
+  --glow-flame-strong: rgba(231, 111, 81, 0.7);
+  --glow-flame-medium: rgba(255, 196, 0, 0.4);
+  --glow-flame-weak: rgba(139, 0, 0, 0.2);
+}
+
+.app.window-app.tencandles.sheet.actor{
+    min-width: 600px;
+    min-height: 650px;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.app.window-app.tencandles.sheet.actor .window-title{
+  color: var(--color-dying-flame);
+  font-family: 'Special Elite', cursive;
+  text-shadow: 0 0 5px var(--color-dying-flame);
+  border-bottom: 2px solid var(--color-border);
+  border-radius: 10px 10px 0 0;
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  margin-top: 2%;
+  margin-bottom: 1%;
+  padding: 10px 5px 10px 5px;
+}
+
+.main-div{
+    background-color: #0a0a0a;
+    height: 100%;
+    width: 100%;
+    padding: 5% 5% 1% 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ESTILOS PARA EL NOMBRE DEL PERSONAJE --- */
+.charname input {
+    color: var(--color-text-light);
+    background: transparent;
+    border: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 0;
+    margin: 0;
+}
+
+/* --- ESTILOS GENERALES DEL PANEL --- */
+.gm-panel {
+  background: var(--color-darkness);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), inset 0 1px 0 var(--color-border);
+  font-family: 'Crimson Text', serif;
+  max-width: 600px; /* Ancho máximo para el panel */
+  width: 90%; /* Ancho responsivo */
+  margin: 20px auto; /* Centra el panel horizontalmente */
+}
+
+.gm-panel .window-title {
+  color: var(--color-dying-flame);
+  font-family: 'Special Elite', cursive;
+  text-shadow: 0 0 5px var(--color-dying-flame);
+  border-bottom: 2px solid var(--color-border);
+  border-radius: 10px 10px 0 0;
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  margin-top: 2%;
+  padding: 10px 15px;
+}
+
+.gm-panel-content {
+  padding: 25px;
+  background: var(--color-darkness);
+}
+
+/* --- RASTREADOR DE VELAS --- */
+
+.candle-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* 5 columnas de igual tamaño */
+  gap: 15px;
+  justify-items: center; /* Centra los elementos horizontalmente */
+  margin-bottom: 30px;
+  padding: 15px;
+  background: var(--color-shadow);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden; /* Agregado para que las sombras grandes no se salgan del contenedor */
+}
+
+.candle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.candle-icon {
+  font-size: 36px; /* Tamaño más pequeño para la llama */
+  transition: all 0.5s ease;
+  cursor: pointer;
+  padding: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Fuego encendido */
+.candle-icon.lit {
+  color: var(--color-dying-flame);
+  /* Se reducen los valores del resplandor para que no se salga */
+  text-shadow: 
+      0 0 5px var(--color-dying-flame),
+      0 0 10px var(--color-final-glow),
+      0 0 15px var(--color-dying-flame);
+  animation: flicker 1.8s infinite alternate ease-in-out;
+}
+
+/* Fuego apagado (brasa) */
+.candle-icon.unlit {
+  color: var(--color-ember);
+  text-shadow: none;
+  filter: grayscale(100%);
+}
+
+/* Efecto de halo para fuegos encendidos */
+.candle-icon.lit::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; /* Tamaño del halo reducido */
+  height: 40px; /* Tamaño del halo reducido */
+  background: radial-gradient(circle, var(--glow-flame-medium) 0%, transparent 80%); /* Gradiente más corto */
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.6;
+  animation: glow-pulse 2.5s infinite alternate;
+}
+
+/* Efectos de hover */
+.candle-icon.unlit:hover {
+  color: #666;
+  transform: scale(1.1);
+}
+
+.candle-icon.lit:hover {
+  transform: scale(1.15) translateY(-2px);
+  /* Se reducen los valores del resplandor en hover para que no se salga */
+  text-shadow: 
+      0 0 8px var(--color-dying-flame),
+      0 0 15px var(--color-final-glow),
+      0 0 20px var(--color-dying-flame);
+}
+
+/* Número de vela debajo del icono */
+.candle-number {
+  margin-top: 5px;
+  font-family: 'Special Elite', cursive;
+  font-size: 1em;
+  color: var(--color-text-light);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Animación de parpadeo sin movimiento */
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  25% { opacity: 0.9; transform: scale(1.02); }
+  50% { opacity: 1; transform: scale(1); }
+  75% { opacity: 0.85; transform: scale(0.98); }
+}
+
+/* Animación de pulso para el halo */
+@keyframes glow-pulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); }
+  100% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* --- ESTILOS DE PIE DE PÁGINA Y BOTONES --- */
+.panel-footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--color-border);
+  display: flex; /* Convierte el contenedor en un flexbox */
+  flex-direction: column; /* Apila los elementos verticalmente */
+  align-items: center; /* Centra los elementos horizontalmente */
+  text-align: center; /* Asegura que el texto dentro de los párrafos se centre */
+}
+
+.panel-footer p {
+  margin: 10px 0;
+  font-family: 'Special Elite', cursive;
+  color: var(--color-text-light);
+  font-size: 1.1em;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.panel-footer .dice-penalty {
+  color: var(--color-fading-red) !important;
+  font-weight: bold;
+  animation: text-pulse 2s infinite alternate;
+}
+
+/* Animación de pulso del texto */
+@keyframes text-pulse {
+  0% { text-shadow: 0 0 8px rgba(139, 0, 0, 0.6); }
+  100% { text-shadow: 0 0 15px rgba(255, 196, 0, 0.6); }
+}
+
+.panel-footer .available-dice {
+  color: var(--color-dying-flame) !important;
+  font-weight: bold;
+  font-size: 1.2em !important;
+  text-shadow: 0 0 8px rgba(231, 111, 81, 0.6) !important;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.panel-footer button {
+  padding: 12px;
+  background: linear-gradient(45deg, var(--color-fading-red), var(--color-dying-flame));
+  color: var(--color-text-light);
+  font-family: 'Special Elite', cursive;
+  font-weight: bold;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--color-border);
+}
+
+.panel-footer button:hover {
+  background: linear-gradient(45deg, var(--color-dying-flame), var(--color-fading-red));
+  border-color: var(--color-dying-flame);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.panel-footer button:active {
+  transform: translateY(0);
+}
+
+/* --- ESTILOS DE SECCIÓN DE DADOS --- */
+.roll-section {
+  padding: 25px;
+  text-align: center;
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+  margin: 20px 0;
+  background: var(--color-shadow);
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.roll-section .roll-dice {
+  padding: 15px 30px;
+  font-size: 1.3em;
+  font-family: 'Special Elite', cursive;
+  font-weight: bold;
+  color: var(--color-text-light);
+  background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
+  border: 2px solid var(--color-dying-flame);
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px var(--glow-flame-medium);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.roll-section .roll-dice:hover {
+  background: linear-gradient(45deg, #3a2a2a, #2a1a2a);
+  border-color: var(--color-final-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 12px var(--glow-flame-medium);
+}
+
+.roll-section .roll-dice:active {
+  transform: translateY(0);
+}
+
+/* --- ESTILOS DE PESTAÑAS (TABS) --- */
+.sheet-tabs .item {
+    color: var(--color-text-light);
+    font-family: 'Special Elite', cursive;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: color 0.3s ease;
+}
+
+.sheet-tabs .item.active {
+    color: var(--color-dying-flame);
+    border-bottom-color: var(--color-dying-flame);
+    text-shadow: 0 0 5px var(--color-dying-flame);
+}
+
+/* --- ESTILOS DE FORMULARIO --- */
+.tencandles .form-group {
+  margin-bottom: 10px;
+  padding: 3px 5px;
+  background: var(--color-shadow);
+  border-left: 3px solid var(--color-fading-red);
+  border-radius: 0 5px 5px 0;
+}
+
+.tencandles .form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 2px;
+  color: var(--color-dying-flame);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 1px;
+  font-family: 'Special Elite', cursive;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.tencandles .form-group input,
+.tencandles .form-group textarea {
+  width: 100%;
+  min-width: 290px;
+  padding: 4px 8px;
+  background: var(--color-darkness);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: 'Crimson Text', serif;
+  transition: all 0.3s ease;
+  height: 28px;
+}
+
+.tencandles .form-group input:focus,
+.tencandles .form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 8px var(--glow-flame-weak);
+  background: #111;
+}
+
+.header-actions.action-buttons {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.candle-tracker-btn {
+  background: linear-gradient(45deg, var(--color-fading-red), var(--color-dying-flame)) !important;
+  color: var(--color-text-light) !important;
+  font-family: 'Special Elite', cursive !important;
+  border: 2px solid var(--color-border) !important;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.3s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  padding: 8px 15px !important;
+  border-radius: 3px !important;
+}
+
+.candle-tracker-btn:hover {
+  background: linear-gradient(45deg, var(--color-dying-flame), var(--color-fading-red)) !important;
+  border-color: var(--color-dying-flame) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* --- ESTILOS DE SCROLLBAR --- */
+.tencandles ::-webkit-scrollbar-track {
+  background: var(--color-shadow);
+  border-radius: 4px;
+}
+
+.tencandles ::-webkit-scrollbar-thumb {
+  background: var(--color-fading-red);
+  border-radius: 4px;
+  border: 1px solid var(--color-darkness);
+}
+
+.tencandles ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dying-flame);
+}
+
+/* --- SELECCIÓN DE TEXTO --- */
+.tencandles ::selection {
+  background: var(--color-dying-flame);
+  color: var(--color-darkness);
+}
+
+.tencandles ::-moz-selection {
+  background: var(--color-dying-flame);
+  color: var(--color-darkness);
+}
+
+/* --- NUEVOS ESTILOS PARA BOTONES DE ACCIÓN --- */
+.btn-icon {
+  background: var(--color-shadow);
+  color: var(--color-dying-flame);
+  border: 1px solid var(--color-border);
+  border-radius: 50%; /* Botón circular */
+  width: 30px;
+  height: 30px;
+  font-size: 1.2em;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  margin-left: 10px;
+}
+
+.btn-icon:hover {
+  background: var(--color-fading-red);
+  color: var(--color-text-light);
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), 0 0 10px var(--glow-flame-weak);
+}
+
+.btn-remove {
+  background: var(--color-darkness);
+  color: var(--color-fading-red);
+}
+
+.btn-remove:hover {
+  background: var(--color-fading-red);
+  color: var(--color-text-light);
+  border-color: var(--color-dying-flame);
+}
+
+/* Flexbox para alinear el input con el botón de eliminar */
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mejora la estructura de la lista */
+.list-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+
+.tencandles .form-groupt {
+  padding: 5px;
+  background: var(--color-shadow);
+  border-left: 3px solid var(--color-fading-red);
+  border-radius: 0 5px 5px 0;
+}
+
+.tencandles .form-groupt label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0;
+  color: var(--color-dying-flame);
+  text-transform: uppercase;
+  font-size: 0.9em;
+  letter-spacing: 1px;
+  font-family: 'Special Elite', cursive;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+.sheet-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tab.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.tencandles .form-groupt {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-bottom: 2%;
+}
+
+.tencandles .form-groupt textarea {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--color-darkness);
+    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: 'Crimson Text', serif;
+    transition: all 0.3s ease;
+    flex: 1;
+    resize: none;
+    overflow-y: auto;
+    min-height: 100px;
+}
+
+.tencandles .form-groupt textarea:focus {
+  outline: none;
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 8px var(--glow-flame-weak);
+  background: #111;
+}

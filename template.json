@@ -1,0 +1,21 @@
+{
+  "Actor": {
+    "types": ["character"],
+    "character": {
+      "biography": "",
+      "traits": {
+        "virtue": "",
+        "vice": ""
+      },
+      "brink": "",
+      "truths": ""
+    }
+  },
+  "Item": {
+    "types": ["trait"],
+    "trait": {
+      "description": "",
+      "traitType": "virtue"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "tencandles",
+  "title": "Ten Candles Unofficial",
+  "description": "An Unofficial system for the Ten Candles tragic horror storytelling game.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": ["Bernardoclon"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    }
+  ],
+  "esmodules": [
+    "module/tencandles.js",
+    "module/pause-customizer.js"
+  ],
+  "styles": [
+    "css/tencandles.css",
+    "css/pause-customizer.css"
+  ],
+  "packs": [],
+  "socket": true,
+  "url": "",
+  "manifest": "",
+  "download": ""
+}
