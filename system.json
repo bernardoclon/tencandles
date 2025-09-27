@@ -31,6 +31,6 @@
   "packs": [],
   "socket": true,
   "url": "",
-  "manifest": "",
+  "manifest": "https://raw.githubusercontent.com/bernardoclon/tencandles/refs/heads/main/system.json",
   "download": ""
 }
