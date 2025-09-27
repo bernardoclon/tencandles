@@ -1,4 +1,4 @@
-#Ten Candles: Sistema no oficial para Foundry VTT
+# Ten Candles: Sistema no oficial para Foundry VTT
 
 Ten Candles es un galardonado juego de rol de terror trágico que cuenta una historia de esperanza en un mundo donde sabes que no hay supervivientes. Juegas en un mundo envuelto en la oscuridad, acechado por "Ellos", donde la luz de diez velas marca el inexorable paso del tiempo hasta que solo queda la desesperación. El juego se centra en la narración colaborativa, el agotamiento de un grupo de dados y el uso de los rasgos de tus personajes (Virtudes, Vicios, Momentos de Esperanza y Brinks) para influir en tus últimas horas de vida. Este sistema para Foundry VTT trae la intensidad de este galardonado juego de mesa a tu mesa virtual.
 
