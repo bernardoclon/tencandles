@@ -4,7 +4,7 @@ Ten Candles es un galardonado juego de rol de terror trágico que cuenta una his
 
 Ten Candles Unofficial system for Foundry VTT es una producción independiente de Bernardoclon y no está afiliada con Cavalry Games. Se publica bajo la Licencia Comunitaria RR&D. Ten Candles es propiedad de Cavalry Games. Puedes encontrar más información y apoyar estos juegos en https://cavalrygames.com/
 
-<img width="500" height="500" alt="logo" src="https://github.com/user-attachments/assets/c6305305-c111-41af-8b32-35591cbd3ead" />
+<img width="500" height="500" styl="align: center" alt="logo" src="https://github.com/user-attachments/assets/c6305305-c111-41af-8b32-35591cbd3ead" />
 
 # Ten Candles: Unofficial System for Foundry VTT##
 
