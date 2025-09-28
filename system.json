@@ -7,7 +7,11 @@
     "minimum": "13",
     "verified": "13"
   },
-  "authors": ["Bernardoclon"],
+  "authors": [
+      {
+      "name": "Don Goblin"
+      }
+  ],
   "languages": [
     {
       "lang": "en",
@@ -30,7 +34,7 @@
   ],
   "packs": [],
   "socket": true,
-  "url": "",
+  "background": "systems/tencandles/art/banner.jpeg",
   "manifest": "https://raw.githubusercontent.com/bernardoclon/tencandles/refs/heads/main/system.json",
   "download": "https://github.com/bernardoclon/tencandles/archive/refs/tags/V1-0.zip"
 }
