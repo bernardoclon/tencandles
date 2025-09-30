@@ -161,4 +161,43 @@ export default class TenCandlesActorSheet extends ActorSheet {
         // Update the actor data
         this.actor.update({ [listPath]: currentList });
     }
+
+    /** @override */
+    async _onDropItem(event, data) {
+        if (!this.actor.isOwner) return false;
+        
+        const item = await Item.implementation.fromDropData(data);
+        
+        // Check if this item type is allowed and map to the correct list
+        const typeToListMap = {
+            virtue: "system.virtues",
+            vice: "system.vices", 
+            brink: "system.brinks"
+        };
+        
+        const listPath = typeToListMap[item.type];
+        if (!listPath) {
+            ui.notifications.error(game.i18n.localize("TENCANDLES.Items.InvalidType"));
+            return false;
+        }
+        
+        // Get current list and add the item data
+        const currentList = foundry.utils.getProperty(this.actor.system, listPath) || [];
+        const newItem = {
+            value: item.name,
+            description: item.system.description || ""
+        };
+        
+        currentList.push(newItem);
+        
+        // Update the actor data
+        await this.actor.update({ [listPath]: currentList });
+        
+        ui.notifications.info(game.i18n.format("TENCANDLES.Items.AddedToList", {
+            itemName: item.name,
+            listType: game.i18n.localize(`TENCANDLES.Items.${item.type.charAt(0).toUpperCase() + item.type.slice(1)}`)
+        }));
+        
+        return true;
+    }
 }

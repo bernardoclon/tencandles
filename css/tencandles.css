@@ -364,8 +364,10 @@
 
 .header-actions.action-buttons {
   display: flex !important;
-  justify-content: center !important;
+  justify-content: stretch !important;
   width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .candle-tracker-btn {
@@ -380,6 +382,9 @@
   letter-spacing: 1px !important;
   padding: 8px 15px !important;
   border-radius: 3px !important;
+  width: 100% !important;
+  flex: 1 !important;
+  min-width: 0 !important;
 }
 
 .candle-tracker-btn:hover {
@@ -528,4 +533,111 @@
   border-color: var(--color-dying-flame);
   box-shadow: 0 0 8px var(--glow-flame-weak);
   background: #111;
+}
+
+/* --- ITEM STYLES --- */
+.tencandles .items-list {
+  background: var(--color-shadow);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.tencandles .items-list .item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.tencandles .items-list .item:last-child {
+  margin-bottom: 0;
+}
+
+.tencandles .items-list .item:hover {
+  background: rgba(139, 69, 19, 0.2);
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 5px var(--glow-flame-weak);
+}
+
+.tencandles .items-list .item-name {
+  flex: 1;
+}
+
+.tencandles .items-list .item-name h4 {
+  margin: 0;
+  font-family: 'Special Elite', cursive;
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+}
+
+.tencandles .items-list .item-name a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.tencandles .items-list .item-name a:hover {
+  color: var(--color-dying-flame);
+  text-shadow: 0 0 5px var(--glow-flame-weak);
+}
+
+.tencandles .items-list .item-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.tencandles .items-list .item-control {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-fading-red);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tencandles .items-list .item-control:hover {
+  background: var(--color-dying-flame);
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 5px var(--glow-flame-weak);
+  transform: translateY(-1px);
+}
+
+/* Item sheet specific styles */
+.tencandles.sheet.item {
+  background: var(--color-shadow-deep);
+  border: 2px solid var(--color-border);
+}
+
+.tencandles.sheet.item .sheet-header {
+  background: linear-gradient(45deg, var(--color-shadow), var(--color-shadow-deep));
+  border-bottom: 2px solid var(--color-border);
+}
+
+.tencandles.sheet.item .item-type {
+  margin-top: 5px;
+  font-family: 'Special Elite', cursive;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tencandles.sheet.item .item-type-display {
+  color: var(--color-dying-flame);
+  font-weight: bold;
 }

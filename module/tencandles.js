@@ -55,9 +55,9 @@ Hooks.once('init', async function() {
         label: "Ten Candles Character Sheet"
     });
     Items.registerSheet("tencandles", TenCandlesItemSheet, {
-        types: ["trait"],
+        types: ["virtue", "vice", "brink"],
         makeDefault: true,
-        label: "Ten Candles Trait Sheet"
+        label: "Ten Candles Item Sheet"
     });
 
 
@@ -85,7 +85,7 @@ Hooks.on("renderActorDirectory", (app, html, data) => {
     
     const button = $(`
         <div class="header-actions action-buttons flexrow">
-            <button class="candle-tracker-btn flex0" style="margin-bottom: 5px;">
+            <button class="candle-tracker-btn flex1" style="margin-bottom: 5px; width: 100%;">
                 <i class="fas fa-fire"></i> ${TrackerTitleb} </button>
         </div>
     `);

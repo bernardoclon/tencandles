@@ -12,10 +12,18 @@
     }
   },
   "Item": {
-    "types": ["trait"],
-    "trait": {
+    "types": ["virtue", "vice", "brink"],
+    "virtue": {
       "description": "",
-      "traitType": "virtue"
+      "itemType": "virtue"
+    },
+    "vice": {
+      "description": "",
+      "itemType": "vice"
+    },
+    "brink": {
+      "description": "",
+      "itemType": "brink"
     }
   }
 }

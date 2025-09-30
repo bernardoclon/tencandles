@@ -1,15 +1,29 @@
 <form class="{{cssClass}}" autocomplete="off">
-    <header class="sheet-header">
-        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
-        <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Trait Name"/></h1>
-        </div>
-    </header>
+    <div class="main-div">
+        <header class="sheet-header">
+            <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+            <div class="header-fields">
+                <h1 class="charname">
+                    <input name="name" type="text" value="{{item.name}}" placeholder="{{itemTypeName}} {{localize 'TENCANDLES.Items.Name'}}"/>
+                </h1>
+                <div class="item-type">
+                    <label>{{localize "TENCANDLES.Items.Type"}}: </label>
+                    <span class="item-type-display">{{itemTypeName}}</span>
+                </div>
+            </div>
+        </header>
 
-    <section class="sheet-body">
-        <div class="form-group">
-            <label>Description</label>
-            <textarea name="system.description" placeholder="Describe the trait...">{{system.description}}</textarea>
-        </div>
-    </section>
+        <nav class="sheet-tabs tabs" data-group="primary">
+            <a class="item" data-tab="main">{{localize "TENCANDLES.Items.Description"}}</a>
+        </nav>
+
+        <section class="sheet-body">
+            <div class="tab" data-group="primary" data-tab="main">
+                <div class="form-group">
+                    <label>{{localize "TENCANDLES.Items.Description"}}</label>
+                    <textarea name="system.description" placeholder="{{localize 'TENCANDLES.Items.DescriptionPlaceholder'}}">{{system.description}}</textarea>
+                </div>
+            </div>
+        </section>
+    </div>
 </form>

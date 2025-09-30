@@ -1,8 +1,7 @@
 {
   "TENCANDLES": {
     "Sheet": {
-      "ActorSheetLabel": "Hoja de Personaje Ten Candles",
-      "ItemSheetLabel": "Hoja de Rasgo Ten Candles"
+      "ActorSheetLabel": "Hoja de Personaje Ten Candles"
     },
     "Setting": {
       "LitCandlesName": "Velas Encendidas",
@@ -28,6 +27,7 @@
       "CharNamePlaceholder": "Nombre del Personaje",
       "RollButton": "Hacer una Tirada",
       "TabMain": "Principal",
+      "Items": "Objetos",
       "VirtuesLabel": "Virtudes",
       "VirtuesPlaceholder": "Una virtud...",
       "VicesLabel": "Vicios",
@@ -37,8 +37,21 @@
       "TruthsLabel": "Verdades",
       "TruthsPlaceholder": "Estas cosas son verdaderas..."
     },
+    "Items": {
+      "Virtue": "Virtud",
+      "Vice": "Vicio",
+      "Brink": "Al Borde",
+      "Name": "Nombre",
+      "Type": "Tipo",
+      "Description": "Descripción",
+      "DescriptionPlaceholder": "Describe este objeto...",
+      "DeleteConfirmTitle": "Eliminar Objeto",
+      "DeleteConfirmMessage": "¿Estás seguro de que quieres eliminar {name}?",
+      "InvalidType": "Este tipo de objeto no es válido para personajes de Ten Candles.",
+      "AddedToList": "{itemName} ha sido agregado a la lista de {listType}."
+    },
     "GM": {
-      "TrackerTitle": "Velas",
+      "TrackerTitle": "Rastreador de Velas",
       "NarratorAlias": "El Narrador",
       "LitCandles": "Velas Encendidas",
       "CandleTitle": "Vela {{count}}",

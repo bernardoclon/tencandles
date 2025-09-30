@@ -1,8 +1,7 @@
 {
   "TENCANDLES": {
     "Sheet": {
-      "ActorSheetLabel": "Ten Candles Character Sheet",
-      "ItemSheetLabel": "Ten Candles Trait Sheet"
+      "ActorSheetLabel": "Ten Candles Character Sheet"
     },
     "Setting": {
       "LitCandlesName": "Lit Candles",
@@ -28,6 +27,7 @@
       "CharNamePlaceholder": "Character Name",
       "RollButton": "Make a Roll",
       "TabMain": "Main",
+      "Items": "Items",
       "VirtuesLabel": "Virtues",
       "VirtuesPlaceholder": "A virtue...",
       "VicesLabel": "Vices",
@@ -37,8 +37,21 @@
       "TruthsLabel": "Truths",
       "TruthsPlaceholder": "These things are true..."
     },
+    "Items": {
+      "Virtue": "Virtue",
+      "Vice": "Vice",
+      "Brink": "Brink",
+      "Name": "Name",
+      "Type": "Type",
+      "Description": "Description",
+      "DescriptionPlaceholder": "Describe this item...",
+      "DeleteConfirmTitle": "Delete Item",
+      "DeleteConfirmMessage": "Are you sure you want to delete {name}?",
+      "InvalidType": "This item type is not valid for Ten Candles characters.",
+      "AddedToList": "{itemName} has been added to the {listType} list."
+    },
     "GM": {
-      "TrackerTitle": "Candles",
+      "TrackerTitle": "Candle Tracker",
       "NarratorAlias": "The Narrator",
       "LitCandles": "Lit Candles",
       "CandleTitle": "Candle ",
