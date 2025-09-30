@@ -12,11 +12,12 @@
     </div>
 
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="main">Main</a>
+        <a class="item" data-tab="main">{{localize "TENCANDLES.ActorSheet.TabMain"}}</a>
+        <a class="item" data-tab="gear">{{localize "TENCANDLES.ActorSheet.TabGear"}}</a>
     </nav>
 
     <section class="sheet-body">
-        <div class="tab main" data-group="primary" data-tab="main">
+        <div class="tab active" data-group="primary" data-tab="main">
             <!-- VIRTUDES SECTION -->
             <div class="form-group">
                 <label>{{localize "TENCANDLES.ActorSheet.VirtuesLabel"}}</label>
@@ -75,6 +76,51 @@
             <div class="form-groupt">
                 <label>{{localize "TENCANDLES.ActorSheet.TruthsLabel"}}</label>
                 <textarea name="system.truths" placeholder="{{localize 'TENCANDLES.ActorSheet.TruthsPlaceholder'}}">{{system.truths}}</textarea>
+            </div>
+        </div>
+
+        <!-- GEAR TAB -->
+        <div class="tab gear" data-group="primary" data-tab="gear">
+            <div class="gear-header">
+                <div class="gear-actions">
+                    <button type="button" class="btn-icon create-gear" data-action="create-gear" title="{{localize 'TENCANDLES.ActorSheet.CreateGear'}}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="total-weight">
+                    <label>{{localize "TENCANDLES.Items.Weight"}} {{localize "Total"}}: </label>
+                    <span class="weight-value">{{totalWeight}}</span>
+                </div>
+            </div>
+            
+            <div class="gear-list">
+                {{#if gear.length}}
+                    {{#each gear as |item|}}
+                        <div class="item gear-item" data-item-id="{{item.id}}">
+                            <div class="item-image">
+                                <img src="{{item.img}}" title="{{item.name}}" />
+                            </div>
+                            <div class="item-name">
+                                <h4><a class="item-edit">{{item.name}}</a></h4>
+                            </div>
+                            <div class="item-quantity">
+                                <span>{{item.system.quantity}}</span>
+                            </div>
+                            <div class="item-weight">
+                                <span>{{item.system.weight}}</span>
+                            </div>
+                            <div class="item-controls">
+                                <a class="item-control item-delete" title="{{localize 'Delete'}}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div class="no-gear">
+                        <p>{{localize "TENCANDLES.ActorSheet.NoGear"}}</p>
+                    </div>
+                {{/if}}
             </div>
         </div>
     </section>

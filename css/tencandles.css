@@ -29,6 +29,14 @@
     box-shadow: none !important;
 }
 
+.app.window-app.tencandles.sheet.item{
+    min-width: 520px;
+    min-height: 480px;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 .app.window-app.tencandles.sheet.actor .window-title{
   color: var(--color-dying-flame);
   font-family: 'Special Elite', cursive;
@@ -319,6 +327,18 @@
     text-shadow: 0 0 5px var(--color-dying-flame);
 }
 
+/* Tab content visibility control */
+.sheet-body .tab {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.sheet-body .tab.active {
+    display: flex;
+}
+
 /* --- ESTILOS DE FORMULARIO --- */
 .tencandles .form-group {
   margin-bottom: 10px;
@@ -499,12 +519,7 @@
     overflow: hidden;
 }
 
-.tab.main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
+/* Removed - now handled by general .tab rules above */
 
 .tencandles .form-groupt {
     display: flex;
@@ -621,11 +636,34 @@
 .tencandles.sheet.item {
   background: var(--color-shadow-deep);
   border: 2px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .tencandles.sheet.item .sheet-header {
   background: linear-gradient(45deg, var(--color-shadow), var(--color-shadow-deep));
   border-bottom: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.tencandles.sheet.item .sheet-tabs {
+  flex-shrink: 0;
+}
+
+.tencandles.sheet.item .sheet-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tencandles.sheet.item .sheet-body .tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  overflow: hidden;
 }
 
 .tencandles.sheet.item .item-type {
@@ -640,4 +678,371 @@
 .tencandles.sheet.item .item-type-display {
   color: var(--color-dying-flame);
   font-weight: bold;
+}
+
+/* Gear-specific item sheet styles */
+.tencandles.sheet.item .gear-stats {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-fading-red);
+  border-radius: 0 5px 5px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tencandles.sheet.item .gear-stats .form-group.inline {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 0;
+  box-sizing: border-box;
+}
+
+.tencandles.sheet.item .gear-stats .form-group.inline label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-family: 'Special Elite', cursive;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+}
+
+.tencandles.sheet.item .gear-stats .form-group.inline input {
+  width: 100%;
+  padding: 8px 6px;
+  background: var(--color-shadow-deep);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text-light);
+  font-family: 'Crimson Text', serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.tencandles.sheet.item .gear-stats .form-group.inline input:focus {
+  outline: none;
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 8px var(--glow-flame-weak), inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  background: var(--color-shadow);
+}
+
+.tencandles.sheet.item .gear-stats .form-group.inline input:hover {
+  border-color: var(--color-fading-red);
+  box-shadow: 0 0 4px rgba(139, 69, 19, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Description area that fills remaining space - using same pattern as form-groupt */
+.tencandles.sheet.item .form-group:has(textarea[name="system.description"]) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 2%;
+}
+
+.tencandles.sheet.item .form-group:has(textarea[name="system.description"]) label {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.tencandles.sheet.item textarea[name="system.description"] {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--color-darkness);
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: 'Crimson Text', serif;
+  transition: all 0.3s ease;
+  flex: 1;
+  resize: none;
+  overflow-y: auto;
+  min-height: 100px;
+}
+
+.tencandles.sheet.item textarea[name="system.description"]:focus {
+  outline: none;
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 0 8px var(--glow-flame-weak);
+  background: #111;
+}
+
+/* Gear tab specific styles */
+.tencandles .tab.gear {
+  padding: 15px;
+}
+
+.tencandles .gear-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  background: var(--color-shadow);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.tencandles .gear-header .gear-actions {
+  display: flex;
+  align-items: center;
+}
+
+.tencandles .gear-header .create-gear {
+  background: linear-gradient(45deg, var(--color-fading-red), var(--color-dying-flame));
+  color: var(--color-text-light);
+  border: 2px solid var(--color-border);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.tencandles .gear-header .create-gear:hover {
+  background: linear-gradient(45deg, var(--color-dying-flame), var(--color-fading-red));
+  border-color: var(--color-dying-flame);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.tencandles .gear-header .create-gear:active {
+  transform: translateY(0);
+}
+
+.tencandles .gear-header .total-weight {
+  font-family: 'Special Elite', cursive;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.tencandles .gear-header .weight-value {
+  color: var(--color-dying-flame);
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.tencandles .gear-list {
+  background: var(--color-shadow);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.tencandles .gear-list .gear-item {
+  display: grid;
+  grid-template-columns: 48px 1fr 50px 50px 32px;
+  grid-template-areas: "image name quantity weight controls";
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-fading-red);
+  border-radius: 0 5px 5px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tencandles .gear-list .gear-item:last-child {
+  margin-bottom: 0;
+}
+
+.tencandles .gear-list .gear-item:hover {
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.3), rgba(139, 69, 19, 0.1));
+  border-color: var(--color-dying-flame);
+  border-left-color: var(--color-dying-flame);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), 0 0 8px var(--glow-flame-weak);
+  transform: translateY(-1px);
+}
+
+.tencandles .gear-list .item-image {
+  grid-area: image;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-shadow-deep);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease;
+}
+
+.tencandles .gear-list .gear-item:hover .item-image {
+  border-color: var(--color-dying-flame);
+}
+
+.tencandles .gear-list .item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.tencandles .gear-list .gear-item:hover .item-image img {
+  transform: scale(1.05);
+}
+
+.tencandles .gear-list .item-name {
+  grid-area: name;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.tencandles .gear-list .item-name h4 {
+  margin: 0;
+  font-family: 'Special Elite', cursive;
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--color-text-light);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.tencandles .gear-list .item-name a {
+  color: var(--color-text-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.tencandles .gear-list .item-name a:hover {
+  color: var(--color-dying-flame);
+  text-shadow: 0 0 5px var(--glow-flame-weak);
+}
+
+.tencandles .gear-list .item-quantity {
+  grid-area: quantity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  padding: 4px;
+  min-height: 20px;
+  max-width: 50px;
+  overflow: hidden;
+}
+
+.tencandles .gear-list .item-quantity span {
+  font-family: 'Crimson Text', serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-text-muted);
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tencandles .gear-list .item-weight {
+  grid-area: weight;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+  padding: 4px;
+  min-height: 20px;
+  max-width: 50px;
+  overflow: hidden;
+}
+
+.tencandles .gear-list .item-weight span {
+  font-family: 'Crimson Text', serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-text-muted);
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tencandles .gear-list .gear-item:hover .item-quantity,
+.tencandles .gear-list .gear-item:hover .item-weight {
+  border-color: var(--color-dying-flame);
+  background: rgba(139, 69, 19, 0.3);
+}
+
+.tencandles .gear-list .gear-item:hover .item-quantity span,
+.tencandles .gear-list .gear-item:hover .item-weight span {
+  color: var(--color-text-light);
+}
+
+.tencandles .gear-list .item-controls {
+  grid-area: controls;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.tencandles .gear-list .item-control {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, var(--color-fading-red), var(--color-dying-flame));
+  color: var(--color-text-light);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 11px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tencandles .gear-list .item-control:hover {
+  background: linear-gradient(45deg, var(--color-dying-flame), var(--color-fading-red));
+  border-color: var(--color-dying-flame);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), 0 0 8px var(--glow-flame-weak);
+  transform: translateY(-1px) scale(1.05);
+}
+
+.tencandles .gear-list .no-gear {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
+  border: 1px dashed var(--color-border);
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.tencandles .gear-list .no-gear p {
+  margin: 0;
+  font-family: 'Crimson Text', serif;
+  font-size: 16px;
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }

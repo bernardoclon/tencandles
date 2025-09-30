@@ -21,6 +21,16 @@ export default class TenCandlesActorSheet extends ActorSheet {
         context.system.vices = context.system.vices || [];
         context.system.brinks = context.system.brinks || [];
 
+        // Get owned gear items
+        context.gear = this.actor.items.filter(i => i.type === "gear");
+        
+        // Calculate total weight for gear
+        context.totalWeight = context.gear.reduce((total, item) => {
+            const weight = item.system.weight || 0;
+            const quantity = item.system.quantity || 1;
+            return total + (weight * quantity);
+        }, 0);
+
         return context;
     }
 
@@ -32,6 +42,11 @@ export default class TenCandlesActorSheet extends ActorSheet {
         // Listeners for dynamic item lists
         html.find('[data-action="add"]').click(this._onItemAdd.bind(this));
         html.find('[data-action="delete"]').click(this._onItemDelete.bind(this));
+
+        // Gear management listeners
+        html.find('.item-edit').click(this._onItemEdit.bind(this));
+        html.find('.item-delete').click(this._onItemDeleteFromActor.bind(this));
+        html.find('.create-gear').click(this._onCreateGear.bind(this));
     }
 
     /**
@@ -168,7 +183,19 @@ export default class TenCandlesActorSheet extends ActorSheet {
         
         const item = await Item.implementation.fromDropData(data);
         
-        // Check if this item type is allowed and map to the correct list
+        // Handle gear items differently - they become actual owned items
+        if (item.type === "gear") {
+            // Check if this item type is allowed
+            if (!["virtue", "vice", "brink", "gear"].includes(item.type)) {
+                ui.notifications.error(game.i18n.localize("TENCANDLES.Items.InvalidType"));
+                return false;
+            }
+            
+            // Create a copy of the item on the actor
+            return this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
+        }
+        
+        // Handle other item types (virtue, vice, brink) - they go into dynamic lists
         const typeToListMap = {
             virtue: "system.virtues",
             vice: "system.vices", 
@@ -199,5 +226,69 @@ export default class TenCandlesActorSheet extends ActorSheet {
         }));
         
         return true;
+    }
+
+    /**
+     * Handle editing an owned item
+     * @param {Event} event   The originating click event
+     * @private
+     */
+    _onItemEdit(event) {
+        event.preventDefault();
+        const li = $(event.currentTarget).parents(".item");
+        const item = this.actor.items.get(li.data("item-id"));
+        item.sheet.render(true);
+    }
+
+    /**
+     * Handle deleting an owned item from the actor
+     * @param {Event} event   The originating click event
+     * @private
+     */
+    async _onItemDeleteFromActor(event) {
+        event.preventDefault();
+        const li = $(event.currentTarget).parents(".item");
+        const item = this.actor.items.get(li.data("item-id"));
+        
+        const confirmDelete = await Dialog.confirm({
+            title: game.i18n.localize("TENCANDLES.Items.DeleteConfirmTitle"),
+            content: game.i18n.format("TENCANDLES.Items.DeleteConfirmMessage", {name: item.name}),
+            yes: () => true,
+            no: () => false
+        });
+        
+        if (confirmDelete) {
+            await item.delete();
+        }
+    }
+
+    /**
+     * Handle creating a new gear item directly from the actor sheet
+     * @param {Event} event   The originating click event
+     * @private
+     */
+    async _onCreateGear(event) {
+        event.preventDefault();
+        
+        const newGearName = game.i18n.localize("TENCANDLES.ActorSheet.NewGearName");
+        
+        const itemData = {
+            name: newGearName,
+            type: "gear",
+            system: {
+                description: "",
+                quantity: 1,
+                weight: 0,
+                itemType: "gear"
+            }
+        };
+        
+        // Create the gear item on the actor
+        const createdItems = await this.actor.createEmbeddedDocuments("Item", [itemData]);
+        
+        // Open the sheet for the newly created item for immediate editing
+        if (createdItems.length > 0) {
+            createdItems[0].sheet.render(true);
+        }
     }
 }

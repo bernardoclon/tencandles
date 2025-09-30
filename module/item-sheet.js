@@ -31,7 +31,8 @@ export default class TenCandlesItemSheet extends ItemSheet {
         const typeNames = {
             virtue: game.i18n.localize("TENCANDLES.Items.Virtue"),
             vice: game.i18n.localize("TENCANDLES.Items.Vice"),
-            brink: game.i18n.localize("TENCANDLES.Items.Brink")
+            brink: game.i18n.localize("TENCANDLES.Items.Brink"),
+            gear: game.i18n.localize("TENCANDLES.Items.Gear")
         };
         return typeNames[type] || type;
     }

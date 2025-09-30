@@ -7,9 +7,13 @@ let gmPanelInstance = null; // Store the GMPanel instance
 Hooks.once('init', async function() {
     console.log('tencandles | Initializing Ten Candles System');
 
-    // Register the 'add' Handlebars helper
+    // Register Handlebars helpers
     Handlebars.registerHelper('add', function (a, b) {
         return a + b;
+    });
+    
+    Handlebars.registerHelper('eq', function (a, b) {
+        return a === b;
     });
 
     // Game setting for candle count
@@ -55,7 +59,7 @@ Hooks.once('init', async function() {
         label: "Ten Candles Character Sheet"
     });
     Items.registerSheet("tencandles", TenCandlesItemSheet, {
-        types: ["virtue", "vice", "brink"],
+        types: ["virtue", "vice", "brink", "gear"],
         makeDefault: true,
         label: "Ten Candles Item Sheet"
     });
