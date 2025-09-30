@@ -6,8 +6,8 @@ export default class TenCandlesActorSheet extends ActorSheet {
             classes: ["tencandles", "sheet", "actor", "character"],
             template: "systems/tencandles/templates/actor/actor-sheet.html",
             width: 600,
-            height: 650,
-            tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "main" }]
+            height: 650
+            // Removed tabs configuration - using custom hidden attribute system
         });
     }
 
@@ -47,6 +47,54 @@ export default class TenCandlesActorSheet extends ActorSheet {
         html.find('.item-edit').click(this._onItemEdit.bind(this));
         html.find('.item-delete').click(this._onItemDeleteFromActor.bind(this));
         html.find('.create-gear').click(this._onCreateGear.bind(this));
+
+        // Custom tab handling with hidden attribute
+        html.find('.sheet-tabs .item').click(this._onTabClick.bind(this));
+        
+        // Initialize tabs - restore previous active tab or show main by default
+        const activeTab = this._activeTab || 'main';
+        this._showTab(html, activeTab);
+    }
+
+    /**
+     * Handle tab navigation using hidden attribute
+     * @param {Event} event   The originating click event
+     * @private
+     */
+    _onTabClick(event) {
+        event.preventDefault();
+        const element = event.currentTarget;
+        const tabName = element.dataset.tab;
+        
+        if (tabName) {
+            this._showTab($(element).closest('.sheet'), tabName);
+        }
+    }
+
+    /**
+     * Show specific tab by managing hidden attributes
+     * @param {jQuery} html     The sheet HTML
+     * @param {string} tabName  The tab to show
+     * @private
+     */
+    _showTab(html, tabName) {
+        // Remember the active tab
+        this._activeTab = tabName;
+        
+        // Hide all tabs
+        html.find('.sheet-body .tab').each(function() {
+            this.setAttribute('hidden', '');
+        });
+        
+        // Show selected tab
+        const selectedTab = html.find(`.sheet-body .tab[data-tab="${tabName}"]`)[0];
+        if (selectedTab) {
+            selectedTab.removeAttribute('hidden');
+        }
+        
+        // Update tab navigation visual state
+        html.find('.sheet-tabs .item').removeClass('active');
+        html.find(`.sheet-tabs .item[data-tab="${tabName}"]`).addClass('active');
     }
 
     /**

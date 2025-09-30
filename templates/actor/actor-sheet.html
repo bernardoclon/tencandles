@@ -17,7 +17,7 @@
     </nav>
 
     <section class="sheet-body">
-        <div class="tab active" data-group="primary" data-tab="main">
+        <div class="tab" data-group="primary" data-tab="main">
             <!-- VIRTUDES SECTION -->
             <div class="form-group">
                 <label>{{localize "TENCANDLES.ActorSheet.VirtuesLabel"}}</label>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- GEAR TAB -->
-        <div class="tab gear" data-group="primary" data-tab="gear">
+        <div class="tab gear" data-group="primary" data-tab="gear" hidden>
             <div class="gear-header">
                 <div class="gear-actions">
                     <button type="button" class="btn-icon create-gear" data-action="create-gear" title="{{localize 'TENCANDLES.ActorSheet.CreateGear'}}">
@@ -92,7 +92,7 @@
                     <span class="weight-value">{{totalWeight}}</span>
                 </div>
             </div>
-            
+
             <div class="gear-list">
                 {{#if gear.length}}
                     {{#each gear as |item|}}
