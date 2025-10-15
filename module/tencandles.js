@@ -87,7 +87,7 @@ Hooks.on("renderActorDirectory", (app, html, data) => {
     
     const button = $(`
         <div class="header-actions action-buttons flexrow">
-            <button class="candle-tracker-btn flex1" style="margin-bottom: 5px; width: 100%;">
+            <button class="candle-tracker-btn flex1" style="margin-bottom: 5px; width: 90%; margin-left: 5%; margin-right: 5%;">
                 <i class="fas fa-fire"></i> ${TrackerTitleb} </button>
         </div>
     `);
