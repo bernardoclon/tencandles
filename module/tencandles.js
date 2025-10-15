@@ -5,7 +5,6 @@ import { GMPanel } from "./gm-panel.js";
 let gmPanelInstance = null; // Store the GMPanel instance
 
 Hooks.once('init', async function() {
-    console.log('tencandles | Initializing Ten Candles System');
 
     // Register Handlebars helpers
     Handlebars.registerHelper('add', function (a, b) {
@@ -72,7 +71,6 @@ Hooks.on("renderActorDirectory", (app, html, data) => {
         return;
     }
 
-    // Convert the plain JavaScript 'html' element to a jQuery object
     const jqHtml = $(html);
 
     const header = jqHtml.find(".directory-header");

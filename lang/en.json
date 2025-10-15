@@ -34,7 +34,7 @@
       "VicesLabel": "Vices",
       "VicesPlaceholder": "A vice...",
       "BrinksLabel": "Brinks",
-      "BrinksPlaceholder": "Enter a brink...",
+      "BrinksPlaceholder": "A brink...",
       "TruthsLabel": "Truths",
       "TruthsPlaceholder": "What truths has the character established...",
       "NoGear": "No gear items. Drag gear items from the Items directory to add them.",
@@ -56,7 +56,11 @@
       "DeleteConfirmTitle": "Delete Item",
       "DeleteConfirmMessage": "Are you sure you want to delete {name}?",
       "InvalidType": "This item type is not valid for Ten Candles characters.",
-      "AddedToList": "{itemName} has been added to the {listType} list."
+      "AddedToList": "{itemName} has been added to the {listType} list.",
+      "CreateFailed": "Could not create the item."
+    },
+    "Warnings": {
+      "SingleItemExists": "A {itemType} already exists for this character"
     },
     "GM": {
       "TrackerTitle": "Candle Tracker",

@@ -1,7 +1,4 @@
 export class GMPanel extends Application {
-    constructor(options = {}) {
-        super(options);
-    }
 
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -37,6 +34,7 @@ export class GMPanel extends Application {
         super.activateListeners(html);
         html.find('.extinguish-btn').click(this._onExtinguish.bind(this));
         html.find('.candle-icon').click(ev => this._onCandleClick(ev));
+        html.find('#dice-penalty-input').change(this._onDicePenaltyChange.bind(this));
     }
 
     async _onExtinguish(event) {
@@ -90,5 +88,24 @@ export class GMPanel extends Application {
                 speaker: { alias: game.i18n.localize("TENCANDLES.GM.NarratorAlias") }
             });
         }
+    }
+
+    async _onDicePenaltyChange(event) {
+        event.preventDefault();
+        const newPenalty = parseInt(event.target.value) || 0;
+        const litCandles = game.settings.get("tencandles", "litCandles");
+        
+        // Ensure penalty doesn't exceed lit candles
+        const clampedPenalty = Math.max(0, Math.min(newPenalty, litCandles));
+        
+        await game.settings.set("tencandles", "dicePenalty", clampedPenalty);
+        
+        // Update the input value if it was clamped
+        if (clampedPenalty !== newPenalty) {
+            event.target.value = clampedPenalty;
+        }
+        
+        // Refresh the panel to update available dice display
+        this.render();
     }
 }

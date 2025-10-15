@@ -33,8 +33,8 @@
       "VirtuesPlaceholder": "Una virtud...",
       "VicesLabel": "Vicios",
       "VicesPlaceholder": "Un vicio...",
-      "BrinksLabel": "Momento",
-      "BrinksPlaceholder": "Un momento...",
+      "BrinksLabel": "Al Borde",
+      "BrinksPlaceholder": "Una memoria...",
       "TruthsLabel": "Verdades",
       "TruthsPlaceholder": "¿Qué verdades ha establecido el personaje...",
       "NoGear": "No hay objetos de equipo. Arrastra objetos de equipo desde el directorio de Objetos para agregarlos.",
@@ -56,7 +56,11 @@
       "DeleteConfirmTitle": "Eliminar Objeto",
       "DeleteConfirmMessage": "¿Estás seguro de que quieres eliminar {name}?",
       "InvalidType": "Este tipo de objeto no es válido para personajes de Ten Candles.",
-      "AddedToList": "{itemName} ha sido agregado a la lista de {listType}."
+      "AddedToList": "{itemName} ha sido agregado a la lista de {listType}.",
+      "CreateFailed": "No se pudo crear el objeto."
+    },
+    "Warnings": {
+      "SingleItemExists": "Ya existe una {itemType} para este personaje"
     },
     "GM": {
       "TrackerTitle": "Rastreador de Velas",

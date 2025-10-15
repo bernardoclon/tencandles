@@ -6,7 +6,7 @@ export default class TenCandlesActorSheet extends ActorSheet {
             classes: ["tencandles", "sheet", "actor", "character"],
             template: "systems/tencandles/templates/actor/actor-sheet.html",
             width: 600,
-            height: 650
+            height: 745
             // Removed tabs configuration - using custom hidden attribute system
         });
     }
@@ -15,14 +15,32 @@ export default class TenCandlesActorSheet extends ActorSheet {
     getData() {
         const context = super.getData();
         context.system = context.actor.system;
+        
+        // Prefer actor.itemTypes if available (Foundry provides grouped arrays)
+        const itemTypes = this.actor.itemTypes || {};
+        const fallback = (t) => this.actor.items.filter(i => i.type === t);
 
-        // Initialize dynamic lists if they don't exist
-        context.system.virtues = context.system.virtues || [];
-        context.system.vices = context.system.vices || [];
-        context.system.brinks = context.system.brinks || [];
+        context.gear    = itemTypes.gear   ? [...itemTypes.gear]   : fallback("gear");
+        context.virtues = itemTypes.virtue ? [...itemTypes.virtue] : fallback("virtue");
+        context.vices   = itemTypes.vice   ? [...itemTypes.vice]   : fallback("vice");
+        context.brinks  = itemTypes.brink  ? [...itemTypes.brink]  : fallback("brink");
 
-        // Get owned gear items
-        context.gear = this.actor.items.filter(i => i.type === "gear");
+    // Flags para deshabilitar botón de creación si ya existe uno
+    context.hasVirtue = context.virtues.length >= 1;
+    context.hasVice   = context.vices.length   >= 1;
+    context.hasBrink  = context.brinks.length  >= 1;
+
+        // Sort for stability (alphabetical)
+        context.virtues.sort((a,b)=>a.name.localeCompare(b.name,"es"));
+        context.vices.sort((a,b)=>a.name.localeCompare(b.name,"es"));
+        context.brinks.sort((a,b)=>a.name.localeCompare(b.name,"es"));
+
+        // Defensive fallbacks
+        if (!context.virtues) context.virtues = [];
+        if (!context.vices) context.vices = [];
+        if (!context.brinks) context.brinks = [];
+
+        // Removed debug logging for production cleanliness
         
         // Calculate total weight for gear
         context.totalWeight = context.gear.reduce((total, item) => {
@@ -39,9 +57,8 @@ export default class TenCandlesActorSheet extends ActorSheet {
         super.activateListeners(html);
         html.find('.roll-dice').click(this._onRoll.bind(this));
 
-        // Listeners for dynamic item lists
-        html.find('[data-action="add"]').click(this._onItemAdd.bind(this));
-        html.find('[data-action="delete"]').click(this._onItemDelete.bind(this));
+        // Create embedded virtue/vice/brink (limited to 1 each)
+        html.find('[data-action="create-entry"]').click(this._onCreateEntry.bind(this));
 
         // Gear management listeners
         html.find('.item-edit').click(this._onItemEdit.bind(this));
@@ -54,6 +71,37 @@ export default class TenCandlesActorSheet extends ActorSheet {
         // Initialize tabs - restore previous active tab or show main by default
         const activeTab = this._activeTab || 'main';
         this._showTab(html, activeTab);
+    }
+
+    /**
+     * Open (or create) an Item sheet corresponding to a dynamic list entry (virtue/vice/brink).
+     * If an embedded Item already exists with the same name and type, open it.
+     * Otherwise prompt the user to convert this entry into a real Item.
+     * @param {Event} event
+     * @private
+     */
+    async _onCreateEntry(event) {
+        event.preventDefault();
+        const btn = event.currentTarget;
+        const type = btn.dataset.type;
+        if (!['virtue','vice','brink'].includes(type)) return;
+
+        // Evitar más de uno por tipo
+        const existing = this.actor.items.filter(i => i.type === type);
+        if (existing.length >= 1) {
+            ui.notifications.warn(game.i18n.format('TENCANDLES.Warnings.SingleItemExists', {
+                itemType: game.i18n.localize(`TENCANDLES.Items.${type.charAt(0).toUpperCase()+type.slice(1)}`)
+            }));
+            return;
+        }
+        const localizedType = game.i18n.localize(`TENCANDLES.Items.${type.charAt(0).toUpperCase()+type.slice(1)}`);
+        const itemData = { name: localizedType, type, system: { description: '' }};
+        const created = await this.actor.createEmbeddedDocuments('Item', [itemData]);
+        if (created?.length && created[0]?.sheet) {
+            created[0].sheet.render(true);
+        } else if (!created?.length) {
+            ui.notifications.warn(game.i18n.localize('TENCANDLES.Items.CreateFailed'));
+        }
     }
 
     /**
@@ -193,87 +241,31 @@ export default class TenCandlesActorSheet extends ActorSheet {
      * @param {Event} event   The originating click event
      * @private
      */
-    _onItemAdd(event) {
-        event.preventDefault();
-        const button = event.currentTarget;
-        const listPath = button.dataset.listPath;
-        const currentList = foundry.utils.getProperty(this.actor.system, listPath) || [];
-
-        // Add a new empty object to the list
-        currentList.push({ value: "" });
-
-        // Update the actor data
-        this.actor.update({ [listPath]: currentList });
-    }
-
-    /**
-     * Handle deleting an item from a list.
-     * @param {Event} event   The originating click event
-     * @private
-     */
-    _onItemDelete(event) {
-        event.preventDefault();
-        const button = event.currentTarget;
-        const listPath = button.dataset.listPath;
-        const index = button.closest('.item-row').dataset.itemIndex;
-        const currentList = foundry.utils.getProperty(this.actor.system, listPath) || [];
-
-        // Remove the item at the specified index
-        currentList.splice(index, 1);
-
-        // Update the actor data
-        this.actor.update({ [listPath]: currentList });
-    }
+    // Removed _onItemAdd and _onItemDelete (dynamic arrays replaced by embedded documents)
 
     /** @override */
     async _onDropItem(event, data) {
         if (!this.actor.isOwner) return false;
-        
         const item = await Item.implementation.fromDropData(data);
-        
-        // Handle gear items differently - they become actual owned items
-        if (item.type === "gear") {
-            // Check if this item type is allowed
-            if (!["virtue", "vice", "brink", "gear"].includes(item.type)) {
-                ui.notifications.error(game.i18n.localize("TENCANDLES.Items.InvalidType"));
+
+        // Normalize to embedded items only; enforce single virtue/vice/brink rule.
+        if (["virtue","vice","brink"].includes(item.type)) {
+            const count = this.actor.items.filter(i=>i.type===item.type).length;
+            if (count >= 1) {
+                ui.notifications.warn(game.i18n.format('TENCANDLES.Warnings.SingleItemExists', {
+                    itemType: game.i18n.localize(`TENCANDLES.Items.${item.type.charAt(0).toUpperCase()+item.type.slice(1)}`)
+                }));
                 return false;
             }
-            
-            // Create a copy of the item on the actor
-            return this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
+            return this.actor.createEmbeddedDocuments('Item', [item.toObject()]);
         }
-        
-        // Handle other item types (virtue, vice, brink) - they go into dynamic lists
-        const typeToListMap = {
-            virtue: "system.virtues",
-            vice: "system.vices", 
-            brink: "system.brinks"
-        };
-        
-        const listPath = typeToListMap[item.type];
-        if (!listPath) {
-            ui.notifications.error(game.i18n.localize("TENCANDLES.Items.InvalidType"));
-            return false;
+
+        if (item.type === 'gear') {
+            return this.actor.createEmbeddedDocuments('Item', [item.toObject()]);
         }
-        
-        // Get current list and add the item data
-        const currentList = foundry.utils.getProperty(this.actor.system, listPath) || [];
-        const newItem = {
-            value: item.name,
-            description: item.system.description || ""
-        };
-        
-        currentList.push(newItem);
-        
-        // Update the actor data
-        await this.actor.update({ [listPath]: currentList });
-        
-        ui.notifications.info(game.i18n.format("TENCANDLES.Items.AddedToList", {
-            itemName: item.name,
-            listType: game.i18n.localize(`TENCANDLES.Items.${item.type.charAt(0).toUpperCase() + item.type.slice(1)}`)
-        }));
-        
-        return true;
+
+        ui.notifications.error(game.i18n.localize('TENCANDLES.Items.InvalidType'));
+        return false;
     }
 
     /**
@@ -317,26 +309,12 @@ export default class TenCandlesActorSheet extends ActorSheet {
      */
     async _onCreateGear(event) {
         event.preventDefault();
-        
-        const newGearName = game.i18n.localize("TENCANDLES.ActorSheet.NewGearName");
-        
-        const itemData = {
-            name: newGearName,
-            type: "gear",
-            system: {
-                description: "",
-                quantity: 1,
-                weight: 0,
-                itemType: "gear"
-            }
-        };
-        
-        // Create the gear item on the actor
-        const createdItems = await this.actor.createEmbeddedDocuments("Item", [itemData]);
-        
-        // Open the sheet for the newly created item for immediate editing
-        if (createdItems.length > 0) {
-            createdItems[0].sheet.render(true);
+        const itemData = { name: game.i18n.localize("TENCANDLES.ActorSheet.NewGearName"), type: 'gear', system: { description: '', quantity: 1, weight: 0, itemType: 'gear' } };
+        const created = await this.actor.createEmbeddedDocuments('Item', [itemData]);
+        if (created?.length && created[0]?.sheet) {
+            created[0].sheet.render(true);
+        } else if (!created?.length) {
+            ui.notifications.warn(game.i18n.localize('TENCANDLES.Items.CreateFailed'));
         }
     }
 }
