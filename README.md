@@ -8,7 +8,7 @@ Ten Candles Unofficial system for Foundry VTT es una producción independiente d
 
 <img width="300" height="300" alt="logo" src="https://github.com/user-attachments/assets/c6305305-c111-41af-8b32-35591cbd3ead" />
 
-# Ten Candles: Unofficial System for Foundry VTT##
+# Ten Candles: Unofficial System for Foundry VTT
 
 Ten Candles is an award-winning tragic horror roleplaying game that tells a story of hope in a world where you know there are no survivors. You play in a world engulfed in darkness, stalked by "Them," where the light of ten candles marks the inexorable passing of time until only despair remains. The game focuses on collaborative storytelling, the dwindling of a communal dice pool, and the use of your characters' traits (Virtues, Vices, Moments of Hope, and Brinks) to influence your final hours. This Foundry VTT system brings the high-intensity atmosphere of the tabletop game to your virtual table.
 
