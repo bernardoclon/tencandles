@@ -2,10 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 
 img.fa-spin {
-    width: 150px; /* Ajusta el tamaño */
-    height: 150px;
+    width: 200px; /* Ajusta el tamaño */
+    height: 200px;
     animation: pulsate 3s infinite ease-in-out, none !important; /* Añade el parpadeo */
-    opacity: 0.75; /* Transparencia inicial */
+    opacity: 1; /* Transparencia inicial */
   }
   
   @keyframes pulsate {
@@ -34,4 +34,5 @@ img.fa-spin {
   
   #pause {
     background: none !important;
+
   }
