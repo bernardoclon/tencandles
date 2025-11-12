@@ -224,19 +224,27 @@ export default class TenCandlesActorSheet extends ActorSheet {
             messageContent += `<div class="result-overlay success">${successtext}</div>`;
         } else {
             messageContent += `<div class="result-overlay failure">${failuretext}</div>`;
-            // Add re-roll button if no successes
-            messageContent += `<button type="button" class="reroll-dice-button" data-num-dice="${availableDice}" data-actor-id="${this.actor.id}" style="
-                background-color: #4a4a4a; /* Darker background */
-                color: #ffffff; /* White text */
-                border: 1px solid #333333; /* Darker border */
-                border-radius: 3px;
-                padding: 5px 10px;
+        }
+        // Add re-roll button if there are failures (1s), regardless of successes
+        if (failures > 0) {
+            messageContent += `<button type="button" class="reroll-dice-button" data-num-dice="${failures}" data-actor-id="${this.actor.id}" data-original-failures="${failures}" style="
+                background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
+                color: #c2c2c2; /* --color-text-light */
+                border: 2px solid #e76f51; /* --color-dying-flame */
+                border-radius: 8px;
+                padding: 5px 10px; /* Keep it smaller than the main roll button */
                 margin-top: 10px;
                 cursor: pointer;
-                font-size: 14px;
+                font-size: 14px; /* Keep it smaller than the main roll button */
                 width: 100%;
                 box-sizing: border-box;
-            ">Re-roll</button>`;
+                text-transform: uppercase;
+                letter-spacing: 1px; /* Slightly less than main roll button */
+                font-family: 'Special Elite', cursive; /* Use the correct font */
+                font-weight: bold;
+                text-shadow: 0 0 8px rgba(255, 196, 0, 0.4); /* --glow-flame-medium */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            ">Re-roll ${failures} dice</button>`; // Updated button text
         }
         messageContent += `</div>`; // close roll-results
         messageContent += `</div>`; // close tencandles-roll-card

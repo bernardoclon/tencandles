@@ -116,6 +116,11 @@ Hooks.on('ready', function() {
                 const currentPenalty = game.settings.get("tencandles", "dicePenalty");
                 const newPenalty = currentPenalty + failures;
                 game.settings.set("tencandles", "dicePenalty", newPenalty);
+            } else if (data.type === 'subtractDicePenalty') { // New handler for subtracting penalty
+                const { failures } = data.payload;
+                const currentPenalty = game.settings.get("tencandles", "dicePenalty");
+                const newPenalty = Math.max(0, currentPenalty - failures); // Ensure penalty doesn't go below 0
+                game.settings.set("tencandles", "dicePenalty", newPenalty);
             }
         }
     });
@@ -139,6 +144,21 @@ async function _onRerollDice(numDice, actorId) {
     await roll.evaluate({async: true});
 
     const successes = roll.terms[0].results.filter(r => r.result === 6).length;
+    const failures = roll.terms[0].results.filter(r => r.result === 1).length; // Calculate failures for re-roll
+
+    // Update dice penalty based on number of 1s rolled in the re-roll
+    if (failures > 0) {
+        if (game.user.isGM) {
+            const currentPenalty = game.settings.get("tencandles", "dicePenalty");
+            const newPenalty = currentPenalty + failures;
+            await game.settings.set("tencandles", "dicePenalty", newPenalty);
+        } else {
+            game.socket.emit('system.tencandles', {
+                type: 'updateDicePenalty', // Use existing type for adding
+                payload: { failures }
+            });
+        }
+    }
 
     let messageContent = `<div class="tencandles-roll-card tencandles-roll">
         <div class="roll-header">
@@ -164,6 +184,8 @@ async function _onRerollDice(numDice, actorId) {
     // Simple result text
     if (successes > 0) {
         messageContent += `<div class="result-overlay success">${successtext}</div>`;
+    } else { // Add failure text for re-roll if no successes
+        messageContent += `<div class="result-overlay failure">${failuretext}</div>`;
     }
     messageContent += `</div>`; // close roll-results
     messageContent += `</div>`; // close tencandles-roll-card
@@ -178,10 +200,29 @@ async function _onRerollDice(numDice, actorId) {
 Hooks.on('renderChatMessage', (app, html, data) => {
     const rerollButton = html.find('.reroll-dice-button');
     if (rerollButton.length > 0) {
-        rerollButton.on('click', (event) => {
-            const numDice = parseInt(event.currentTarget.dataset.numDice);
-            const actorId = event.currentTarget.dataset.actorId;
-            _onRerollDice(numDice, actorId);
+        rerollButton.on('click', async (event) => { // Make the function async
+            const button = event.currentTarget;
+            if (button.disabled) return; // Prevent multiple clicks
+
+            button.disabled = true; // Disable the button
+            button.innerText = "Re-rolled"; // Change button text
+            const numDice = parseInt(button.dataset.numDice);
+            const actorId = button.dataset.actorId;
+            const originalFailures = parseInt(button.dataset.originalFailures); // Get original failures
+
+            // Subtract original failures from penalty
+            if (game.user.isGM) {
+                const currentPenalty = game.settings.get("tencandles", "dicePenalty");
+                const newPenalty = Math.max(0, currentPenalty - originalFailures); // Ensure penalty doesn't go below 0
+                await game.settings.set("tencandles", "dicePenalty", newPenalty);
+            } else {
+                game.socket.emit('system.tencandles', {
+                    type: 'subtractDicePenalty', // New type for subtracting
+                    payload: { failures: originalFailures }
+                });
+            }
+
+            _onRerollDice(numDice, actorId); // originalFailures is not needed in _onRerollDice anymore
         });
     }
 });
