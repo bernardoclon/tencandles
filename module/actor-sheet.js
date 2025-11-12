@@ -224,6 +224,19 @@ export default class TenCandlesActorSheet extends ActorSheet {
             messageContent += `<div class="result-overlay success">${successtext}</div>`;
         } else {
             messageContent += `<div class="result-overlay failure">${failuretext}</div>`;
+            // Add re-roll button if no successes
+            messageContent += `<button type="button" class="reroll-dice-button" data-num-dice="${availableDice}" data-actor-id="${this.actor.id}" style="
+                background-color: #4a4a4a; /* Darker background */
+                color: #ffffff; /* White text */
+                border: 1px solid #333333; /* Darker border */
+                border-radius: 3px;
+                padding: 5px 10px;
+                margin-top: 10px;
+                cursor: pointer;
+                font-size: 14px;
+                width: 100%;
+                box-sizing: border-box;
+            ">Re-roll</button>`;
         }
         messageContent += `</div>`; // close roll-results
         messageContent += `</div>`; // close tencandles-roll-card

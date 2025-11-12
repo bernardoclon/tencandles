@@ -121,6 +121,71 @@ Hooks.on('ready', function() {
     });
 });
 
+// Function to handle re-rolling dice
+async function _onRerollDice(numDice, actorId) {
+    const actor = game.actors.get(actorId);
+    if (!actor) {
+        ui.notifications.error("Actor not found for re-roll.");
+        return;
+    }
+
+    const flavortext =  game.i18n.localize("TENCANDLES.Roll.Flavor");
+    const rollindice1text =  game.i18n.localize("TENCANDLES.Roll.RollingDice1");
+    const rollindice2text =  game.i18n.localize("TENCANDLES.Roll.RollingDice2");
+    const successtext =  game.i18n.localize("TENCANDLES.Roll.Success");
+    const failuretext =  game.i18n.localize("TENCANDLES.Roll.Failure");
+
+    const roll = new Roll(`${numDice}d6`);
+    await roll.evaluate({async: true});
+
+    const successes = roll.terms[0].results.filter(r => r.result === 6).length;
+
+    let messageContent = `<div class="tencandles-roll-card tencandles-roll">
+        <div class="roll-header">
+            <h2>${actor.name} ${flavortext} (Re-roll)</h2>
+            <p>${rollindice1text} ${numDice} ${rollindice2text}</p>
+        </div>`;
+
+    messageContent += `<div class="roll-results">`;
+
+    // Display dice results visually
+    messageContent += `<div class="dice-results">`;
+    const diceUnicode = ['<i class="fas fa-dice-one"></i>', '<i class="fas fa-dice-two"></i>', '<i class="fas fa-dice-three"></i>', '<i class="fas fa-dice-four"></i>', '<i class="fas fa-dice-five"></i>', '<i class="fas fa-dice-six"></i>'];
+    roll.terms[0].results.forEach(r => {
+        const result = r.result;
+        let dieClass = 'die';
+        if (result === 1) dieClass += ' failure';
+        else if (result === 6) dieClass += ' success';
+        else dieClass += ' neutral';
+        messageContent += `<span class="${dieClass}">${diceUnicode[result - 1]}</span>`;
+    });
+    messageContent += `</div>`;
+
+    // Simple result text
+    if (successes > 0) {
+        messageContent += `<div class="result-overlay success">${successtext}</div>`;
+    }
+    messageContent += `</div>`; // close roll-results
+    messageContent += `</div>`; // close tencandles-roll-card
+
+    // Create the chat message
+    roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: actor }),
+        flavor: messageContent
+    });
+}
+
+Hooks.on('renderChatMessage', (app, html, data) => {
+    const rerollButton = html.find('.reroll-dice-button');
+    if (rerollButton.length > 0) {
+        rerollButton.on('click', (event) => {
+            const numDice = parseInt(event.currentTarget.dataset.numDice);
+            const actorId = event.currentTarget.dataset.actorId;
+            _onRerollDice(numDice, actorId);
+        });
+    }
+});
+
 Hooks.on("updateSetting", (setting, data, options, userId) => {
     if (setting.key === "tencandles.dicePenalty") {
         // Re-render all actor sheets
