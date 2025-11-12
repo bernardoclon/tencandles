@@ -244,7 +244,7 @@ export default class TenCandlesActorSheet extends ActorSheet {
                 font-weight: bold;
                 text-shadow: 0 0 8px rgba(255, 196, 0, 0.4); /* --glow-flame-medium */
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            ">Re-roll ${failures} dice</button>`; // Updated button text
+            ">Re-roll ${failures} ${rollindice2text}</button>`; // Updated button text
         }
         messageContent += `</div>`; // close roll-results
         messageContent += `</div>`; // close tencandles-roll-card
