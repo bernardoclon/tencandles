@@ -473,27 +473,20 @@ export default class TenCandlesActorSheet extends ActorSheet {
 
         const numDice = last.numDice;
 
-        // For repeat rerolls (Brinks), request the GM to perform the reroll atomically so
-        // the subtraction of original failures and addition of new failures happens in one step.
-        const originalFailures = last.failures || 0;
-        const hopeActiveFlag = last.hopeApplied || false;
-
-        game.socket.emit('system.tencandles', {
-            type: 'performReroll',
-            payload: {
-                numDice: numDice,
-                actorId: this.actor.id,
-                originalFailures: originalFailures,
-                requestUserId: game.user.id,
-                repeat: true,
-                hopeActive: hopeActiveFlag,
-                consumeBrink: true
+        // If the last roll had failures, restore those dice first (remove their penalty)
+        if (last.failures && last.failures > 0) {
+            const restore = last.failures;
+            if (game.user.isGM) {
+                const currentPenalty = game.settings.get("tencandles", "dicePenalty");
+                const newPenalty = Math.max(0, currentPenalty - restore);
+                await game.settings.set("tencandles", "dicePenalty", newPenalty);
+            } else {
+                game.socket.emit('system.tencandles', {
+                    type: 'subtractDicePenalty',
+                    payload: { failures: restore }
+                });
             }
-        });
-
-        // If the current user is the GM, the GM handler will already perform the roll and update the UI.
-        // We return early to avoid duplicating the roll locally.
-        return;
+        }
 
         const flavortext =  game.i18n.localize("TENCANDLES.Roll.Flavor");
         const rollindice1text =  game.i18n.localize("TENCANDLES.Roll.RollingDice1");
