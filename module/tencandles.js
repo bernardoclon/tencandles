@@ -146,12 +146,17 @@ Hooks.on('ready', function() {
 });
 
 // Function to handle re-rolling dice
-async function _onRerollDice(numDice, actorId) {
+async function _onRerollDice(numDice, actorId, penaltyAfterRefund) {
+    const litCandles = game.settings.get("tencandles", "litCandles");
     const actor = game.actors.get(actorId);
     if (!actor) {
         ui.notifications.error("Actor not found for re-roll.");
         return;
     }
+    // The number of dice to roll is the smaller of numDice or the currently available dice pool
+    const currentPenalty = penaltyAfterRefund; // Use the penalty value passed after the refund
+    const availableDice = Math.max(0, litCandles - currentPenalty);
+    const diceToRoll = Math.min(numDice, availableDice);
 
     const flavortext =  game.i18n.localize("TENCANDLES.Roll.Flavor");
     const rollindice1text =  game.i18n.localize("TENCANDLES.Roll.RollingDice1");
@@ -159,7 +164,7 @@ async function _onRerollDice(numDice, actorId) {
     const successtext =  game.i18n.localize("TENCANDLES.Roll.Success");
     const failuretext =  game.i18n.localize("TENCANDLES.Roll.Failure");
 
-    const roll = new Roll(`${numDice}d6`);
+    const roll = new Roll(`${diceToRoll}d6`);
     await roll.evaluate({async: true});
 
     const successes = roll.terms[0].results.filter(r => r.result === 6).length;
@@ -167,8 +172,7 @@ async function _onRerollDice(numDice, actorId) {
 
     // Update dice penalty based on number of 1s rolled in the re-roll
     if (failures > 0) {
-        if (game.user.isGM) {
-            const currentPenalty = game.settings.get("tencandles", "dicePenalty");
+        if (game.user.isGM) {            
             const newPenalty = currentPenalty + failures;
             await game.settings.set("tencandles", "dicePenalty", newPenalty);
         } else {
@@ -182,7 +186,7 @@ async function _onRerollDice(numDice, actorId) {
     let messageContent = `<div class="tencandles-roll-card tencandles-roll">
         <div class="roll-header">
             <h2>${actor.name} ${flavortext} (Re-roll)</h2>
-            <p>${rollindice1text} ${numDice} ${rollindice2text}</p>
+            <p>${rollindice1text} ${diceToRoll} ${rollindice2text}</p>
         </div>`;
 
     messageContent += `<div class="roll-results">`;
@@ -240,13 +244,14 @@ Hooks.on('renderChatMessage', (app, html, data) => {
                 const rerollType = button.dataset.rerollType || 'failures';
 
                 // If this is a failures-based re-roll we need to subtract the original failures first
+                let penaltyAfterRefund = game.settings.get("tencandles", "dicePenalty");
                 if (rerollType === 'failures') {
                     const originalFailures = parseInt(button.dataset.originalFailures) || 0; // Get original failures
                     if (originalFailures > 0) {
                         if (game.user.isGM) {
                             const currentPenalty = game.settings.get("tencandles", "dicePenalty");
-                            const newPenalty = Math.max(0, currentPenalty - originalFailures); // Ensure penalty doesn't go below 0
-                            await game.settings.set("tencandles", "dicePenalty", newPenalty);
+                            penaltyAfterRefund = Math.max(0, currentPenalty - originalFailures); // Ensure penalty doesn't go below 0
+                            await game.settings.set("tencandles", "dicePenalty", penaltyAfterRefund);
                         } else {
                             game.socket.emit('system.tencandles', {
                                 type: 'subtractDicePenalty', // New type for subtracting
@@ -257,7 +262,7 @@ Hooks.on('renderChatMessage', (app, html, data) => {
                 }
 
                 // Perform the reroll. For full re-roll we simply reroll the provided dice count.
-                _onRerollDice(numDice, actorId);
+                _onRerollDice(numDice, actorId, penaltyAfterRefund);
             });
         });
     }
