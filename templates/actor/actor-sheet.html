@@ -69,6 +69,19 @@
                         {{#unless hasBrink}}
                         <button type="button" class="btn-add create-entry" data-action="create-entry" data-type="brink"><i class="fas fa-plus"></i></button>
                         {{/unless}}
+                        {{!-- If the actor has neither virtues nor vices, and has no Moments, show a die-button to repeat the last roll --}}
+                        {{#unless hasMoment}}
+                            {{#unless hasVirtue}}
+                                {{#unless hasVice}}
+                                    {{#if brinks.length}}
+                                        <!-- Use the same visual style as the small add button and place it at the far right -->
+                                        <button type="button" class="btn-add repeat-last-roll" title="{{localize "TENCANDLES.ActorSheet.RepeatLastRoll"}}">
+                                            <i class="fas fa-dice-one" aria-hidden="true"></i>
+                                        </button>
+                                    {{/if}}
+                                {{/unless}}
+                            {{/unless}}
+                        {{/unless}}
                     </div>
                     <div class="section-content">
                         {{#if brinks.length}}
@@ -82,6 +95,35 @@
                             {{/each}}
                         {{else}}
                             <div class="mini-empty"><em>{{localize 'TENCANDLES.ActorSheet.BrinksPlaceholder'}}</em></div>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="character-section moment-section mini-list">
+                    <div class="section-header">
+                        <span class="section-title">{{localize "TENCANDLES.ActorSheet.MomentsLabel"}}</span>
+                        {{#unless hasMoment}}
+                        <button type="button" class="btn-add create-entry" data-action="create-entry" data-type="moment"><i class="fas fa-plus"></i></button>
+                        {{/unless}}
+                        {{!-- Show Hope checkbox only when there is no Moment and align it to the far right --}}
+                        {{#unless hasMoment}}
+                        <label class="hope-control" style="margin-left:auto">
+                            <input type="checkbox" class="hope-checkbox" {{#if hope}}checked{{/if}} />
+                            <span class="hope-label">{{localize "TENCANDLES.ActorSheet.HopeLabel"}}</span>
+                        </label>
+                        {{/unless}}
+                    </div>
+                    <div class="section-content">
+                        {{#if moments.length}}
+                            {{#each moments as |item|}}
+                                <div class="item mini-item" data-item-id="{{item.id}}" data-item-type="moment">
+                                    <div class="item-name"><a class="item-edit">{{item.name}}</a></div>
+                                    <div class="item-controls">
+                                        <a class="item-control item-delete" title="{{localize 'Delete'}}"><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        {{else}}
+                            <div class="mini-empty"><em>{{localize 'TENCANDLES.ActorSheet.MomentsPlaceholder'}}</em></div>
                         {{/if}}
                     </div>
                 </div>

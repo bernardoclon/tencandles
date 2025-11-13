@@ -20,6 +20,8 @@
       "OnesMessage": "Rolled ones! The darkness grows stronger...",
       "PenaltyMessage": "Dice pool reduced by $1. Next roll will use $2 dice.",
       "NoDiceReset": "No dice remain! A candle must be extinguished to reset the dice pool.",
+      "NoPreviousRoll": "No previous roll to repeat.",
+      "Repeatroll": "Last Roll Repeated",
       "PenaltyText": "Excluded dices",
       "CandlesText": "Candles"
     },
@@ -39,12 +41,24 @@
       "TruthsPlaceholder": "What truths has the character established...",
       "NoGear": "No gear items. Drag gear items from the Items directory to add them.",
       "CreateGear": "Create Gear",
-      "NewGearName": "New Gear"
+      "NewGearName": "New Gear",
+      "RepeatLastRoll": "Repeat Last Roll",
+  "BrinkRemoved": "A Brink was consumed after the failed repeat.",
+  "BrinkRemoveFailed": "Failed to remove the Brink automatically. The GM has been notified.",
+      "MomentsLabel": "Moments",
+      "MomentsPlaceholder": "A moment...",
+      "HopeLabel": "Hope",
+  "MomentBlocksHope": "Cannot enable Hope while a Moment exists.",
+      "RepeatNotAllowed": "Cannot repeat last roll: this action is only allowed when the character has no Virtues or Vices."
+    },
+    "Chat": {
+      "ReRolled": "Re-rolled"
     },
     "Items": {
       "Virtue": "Virtue",
       "Vice": "Vice",
       "Brink": "Brink",
+      "Moment": "Moment",
       "Gear": "Gear",
       "Name": "Name",
       "Type": "Type",

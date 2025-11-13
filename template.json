@@ -8,11 +8,12 @@
         "vice": ""
       },
       "brink": "",
+      "moment": "",
       "truths": ""
     }
   },
   "Item": {
-    "types": ["virtue", "vice", "brink", "gear"],
+    "types": ["virtue", "vice", "brink", "moment", "gear"],
     "virtue": {
       "description": "",
       "itemType": "virtue"
@@ -24,6 +25,10 @@
     "brink": {
       "description": "",
       "itemType": "brink"
+    },
+    "moment": {
+      "description": "",
+      "itemType": "moment"
     },
     "gear": {
       "description": "",

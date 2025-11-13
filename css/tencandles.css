@@ -398,11 +398,22 @@
   background: var(--color-darkness);
   color: var(--color-text-light);
   border: 1px solid var(--color-border);
-  border-radius: 4px;
-  font-family: 'Crimson Text', serif;
-  transition: all 0.3s ease;
-  height: 28px;
+
 }
+
+/* Hope checkbox control alignment */
+.hope-control {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hope-control .hope-label {
+  color: var(--color-final-glow);
+  font-family: 'Special Elite', cursive;
+  font-size: 0.95em;
+}
+ 
 
 .tencandles .form-group input:focus,
 .tencandles .form-group textarea:focus {
@@ -1056,6 +1067,36 @@
 .tencandles .btn-add:focus-visible {
   outline: 2px solid var(--color-final-glow);
   outline-offset: 2px;
+}
+
+/* Place the repeat-last-roll die button at the far right of the section header
+   and make sure it inherits the small add-button appearance. */
+.tencandles .section-header .repeat-last-roll {
+  margin-left: auto;
+}
+
+.tencandles .btn-add.repeat-last-roll i {
+  font-size: 11px;
+}
+
+/* Ensure the die icon is perfectly centered inside the small add-style button */
+.tencandles .btn-add.repeat-last-roll {
+  /* Match the small add button size so both appear identical in layout */
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.tencandles .btn-add.repeat-last-roll i {
+  display: block;
+  line-height: 1;
+  margin: 0;
+  font-size: 11px; /* same visual scale as the add button */
+  transform: none;
 }
 
 .tencandles .section-content {

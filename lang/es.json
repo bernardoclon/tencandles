@@ -20,6 +20,8 @@
       "OnesMessage": "¡Se han sacado unos! La oscuridad se hace más fuerte...",
       "PenaltyMessage": "Reserva de dados reducida en $1. La próxima tirada usará $2 dados.",
       "NoDiceReset": "¡No quedan dados! Se debe extinguir una vela para reiniciar la reserva de dados.",
+      "NoPreviousRoll": "No hay tirada previa para repetir.",
+      "Repeatroll": "Última Tirada Repetida",
       "PenaltyText": "Dados retirados",
       "CandlesText": "Velas"
     },
@@ -33,18 +35,30 @@
       "VirtuesPlaceholder": "Una virtud...",
       "VicesLabel": "Vicios",
       "VicesPlaceholder": "Un vicio...",
-      "BrinksLabel": "Al Borde",
+      "BrinksLabel": "Tope",
       "BrinksPlaceholder": "Una memoria...",
       "TruthsLabel": "Verdades",
       "TruthsPlaceholder": "¿Qué verdades ha establecido el personaje...",
       "NoGear": "No hay objetos de equipo. Arrastra objetos de equipo desde el directorio de Objetos para agregarlos.",
       "CreateGear": "Crear Equipo",
       "NewGearName": "Nuevo Equipo"
+      ,"RepeatLastRoll": "Repetir última tirada",
+  "BrinkRemoved": "Se ha eliminado un tope tras fallar la re-tirada.",
+  "BrinkRemoveFailed": "No se pudo eliminar automáticamente el tope. El Narrador ha sido notificado.",
+  "MomentsLabel": "Momentos",
+  "MomentsPlaceholder": "Un momento...",
+  "HopeLabel": "Esperanza",
+  "MomentBlocksHope": "No se puede activar Esperanza mientras exista un Momento.",
+  "RepeatNotAllowed": "No se puede repetir la última tirada: esta acción solo está permitida cuando el personaje no tiene Virtudes ni Vicios."
+    },
+    "Chat": {
+      "ReRolled": "Re-tirado"
     },
     "Items": {
       "Virtue": "Virtud",
       "Vice": "Vicio",
-      "Brink": "Al Borde",
+      "Brink": "Tope",
+      "Moment": "Momento",
       "Gear": "Equipo",
       "Name": "Nombre",
       "Type": "Tipo",

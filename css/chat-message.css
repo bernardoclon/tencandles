@@ -51,6 +51,12 @@
   color: #ccc;
 }
 
+/* Special visual for the Hope extra die */
+.tencandles-roll-card .dice-results .die.hope-die {
+  color: #ffd166;
+  text-shadow: 0 0 12px #ffd166, 0 0 6px #000000;
+}
+
 .tencandles-roll-card .roll-results {
   display: flex;
   flex-direction: column;
