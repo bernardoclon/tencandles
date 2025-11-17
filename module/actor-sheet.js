@@ -189,7 +189,7 @@ export default class TenCandlesActorSheet extends ActorSheet {
 
         const litCandles = game.settings.get("tencandles", "litCandles");
         const dicePenalty = game.settings.get("tencandles", "dicePenalty");
-        const availableDice = Math.max(0, litCandles - dicePenalty);
+        let availableDice = Math.max(0, litCandles - dicePenalty);
         const flavortext =  game.i18n.localize("TENCANDLES.Roll.Flavor");
         const rollindice1text =  game.i18n.localize("TENCANDLES.Roll.RollingDice1");
         const rollindice2text =  game.i18n.localize("TENCANDLES.Roll.RollingDice2");
@@ -246,7 +246,7 @@ export default class TenCandlesActorSheet extends ActorSheet {
         }
 
         // Update dice penalty based only on main roll 1s
-        if (failures > 0) {
+        if (failures > 0 && litCandles > 1) {
             if (game.user.isGM) {
                 const newPenalty = dicePenalty + failures;
                 await game.settings.set("tencandles", "dicePenalty", newPenalty);
@@ -457,6 +457,8 @@ export default class TenCandlesActorSheet extends ActorSheet {
     async _onRepeatLastRoll(event) {
         event.preventDefault();
 
+        const litCandles = game.settings.get("tencandles", "litCandles");
+
         // Only allowed if actor truly has no virtues and no vices (UI should already enforce this)
         const hasVirtue = this.actor.items.filter(i => i.type === 'virtue').length > 0;
         const hasVice = this.actor.items.filter(i => i.type === 'vice').length > 0;
@@ -525,7 +527,7 @@ export default class TenCandlesActorSheet extends ActorSheet {
         const failures = failuresMain; // do not count hope die 1 as penalty
 
         // Update dice penalty based only on main roll 1s
-        if (failures > 0) {
+        if (failures > 0 && litCandles > 1) {
             if (game.user.isGM) {
                 const currentPenalty = game.settings.get("tencandles", "dicePenalty");
                 const newPenalty = currentPenalty + failures;
