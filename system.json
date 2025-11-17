@@ -2,7 +2,7 @@
   "id": "tencandles",
   "title": "Ten Candles Unofficial",
   "description": "An Unofficial system for the Ten Candles tragic horror storytelling game.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "compatibility": {
     "minimum": "13",
     "verified": "13"
@@ -39,5 +39,5 @@
   "socket": true,
   "background": "systems/tencandles/art/banner.jpeg",
   "manifest": "https://raw.githubusercontent.com/bernardoclon/tencandles/refs/heads/main/system.json",
-  "download": "https://github.com/bernardoclon/tencandles/archive/refs/tags/V1-2.zip"
+  "download": "https://github.com/bernardoclon/tencandles/archive/refs/tags/V1-3.zip"
 }
