@@ -79,3 +79,7 @@
   color: #dc3545;
 }
 
+.chat-message .dice-roll {
+    display: none;
+}
+
